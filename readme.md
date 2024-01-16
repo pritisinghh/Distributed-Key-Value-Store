@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository contains the implementation of a distributed multi-consistency key-value store. The goal of this programming assignment was to design and implement a system that showcases different consistency schemes using underlying key-value store replicas.
+This repository contains the implementation of a distributed multi-consistency key-value store. The goal of this programming assignment was to design and implement a system that showcases different consistency schemes using underlying key-value store replicas. I have used zeroMQ PUB-SUB architecture to achieve all this consistency model.
 
 ## Key-Value Store Specification
 
