@@ -1,80 +1,43 @@
-For this programming assignment, my task was to design and implement a distributed multi consistency key value store which shows the different consistency schemes that use the underlying key-value store replicas.
-I have used the key vaue store from the first assignment which takes the input in the following manner
-Set
-The set command is whitespace delimited, and consists of two lines:
+# Distributed Multi-Consistency Key-Value Store
+
+## Introduction
+
+This repository contains the implementation of a distributed multi-consistency key-value store. The goal of this programming assignment was to design and implement a system that showcases different consistency schemes using underlying key-value store replicas.
+
+## Key-Value Store Specification
+
+The key-value store accepts commands in the following format:
+
+### Set
+The set command is whitespace delimited and consists of two lines:
+```
 set <key> <value> \r\n
-The server should respond with either "STORED\r\n", or "NOT-STORED\r\n".
-Get
-Retrieving data is simpler: get <key>\r\n
-The server should respond with two lines: VALUE <key> <bytes> \r\n
+```
+The server responds with either "STORED\r\n" or "NOT-STORED\r\n".
+
+### Get
+Retrieving data is done using the following command:
+```
+get <key>\r\n
+```
+The server responds with two lines:
+```
+VALUE <key> <bytes> \r\n
 <data block>\r\n
-I have spawned multiple processes for multiple servers that could handle multiple clients. The following are the architecture , design and test cases for each of the model. Architecture – Eventual Consistency
-I have implemented the broadcasting method to achieve this. I have spawned multiple servers for this and these servers can be connected to multiple clients. The server which gets connected to client writes to its local copy first and then broadcast it to other servers which keep listening.
-Once they receive the broadcast message, they update their key value store.
-For read the client can be connected to any server and there are also chances that it may receive stale reads On a high level, the following steps were taken to achieve eventual consistency
+```
 
-# How to run 
+## Architecture - Eventual Consistency
 
-## Eventual
-`
-## Server
+The system achieves eventual consistency by implementing a broadcasting method. Multiple servers are spawned to handle multiple clients. When a server receives a write request from a client, it first updates its local copy and then broadcasts the update to other servers. Clients may connect to any server for reads, but there's a possibility of receiving stale reads.
 
-`
-python ServerEventual.py
-`
+## Architecture - Sequential Consistency
 
-## Client
+Sequential consistency is implemented using a primary-based model. Write requests (set) are sent to the primary, which updates its key-value store and broadcasts the message to other server replicas. After receiving the broadcast, replicas send an acknowledgement to the primary and respond to the client.
 
-`
-python ClientEventual.py
+## Architecture - Linearizability
 
-## Causal
-`
-## Server
+Linearizability is achieved using the primary-based protocol with the added feature that reads (get) are blocking. Read requests are also sent to the primary, and replicas respond to the client only after obtaining the appropriate value from the primary, ensuring clients receive a coherent view at all times.
 
-`
-python ServerCau.py
-`
+## Architecture - Causal Consistency
 
-## Client
-
-`
-python ClientCau.py
-
-## Sequential
-`
-## Server
-
-`
-python ServerSeq.py
-`
-
-## Client
-
-`
-python ClientSeq.py
-
-## Primary
-`
-python Primary.py
-
-## Linearizibility
-`
-## Server
-
-`
-python ServerLin.py
-`
-
-## Client
-
-`
-python ClientLin.py
-
-## Primary
-`
-python PrimaryLin.py
-
-`
-`
-To test with different ports change the constants.py file
+Causal consistency is implemented by ensuring the order of operations (updates and reads) is consistent with the causal dependencies between them. Vector clocks are used to track causal dependencies between operations.
