@@ -1,4 +1,4 @@
-#For this programming assignment, my task was to design and implement a distributed multi consistency key value store which shows the different consistency schemes that use the underlying key-value store replicas.
+For this programming assignment, my task was to design and implement a distributed multi consistency key value store which shows the different consistency schemes that use the underlying key-value store replicas.
 I have used the key vaue store from the first assignment which takes the input in the following manner
 Set
 The set command is whitespace delimited, and consists of two lines:
